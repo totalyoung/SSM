@@ -35,11 +35,9 @@ public class AspectLog {
 //		for (int i = 0; i < params.length; i++) {
 //			args[i] = params[i].getClass();
 //		}
-		Method declaredMethod = clazz.getDeclaredMethod(name, args);
+		//Method declaredMethod = clazz.getDeclaredMethod(name, args);
 		//declaredMethod.getp
-		
-		
-		System.out.println(declaredMethod.toString());
+		System.out.println("kk");
 	}
 	
 //	@Around("@annotation(org.springframework.web.bind.annotation.RequestMapping)")
@@ -54,10 +52,10 @@ public class AspectLog {
 //		System.out.println("addLog.....");
 //	}
 //	
-//	@AfterReturning(pointcut="",returning="retVal")
-//	public void afterReturningOperation(Object retVal){
-//		System.out.println("addLog.....");
-//	}	
+	@AfterReturning(pointcut="@annotation(org.springframework.web.bind.annotation.RequestMapping)",returning="retVal")
+	public void afterReturningOperation(Object retVal){
+		System.out.println(retVal.toString());
+	}	
 //	
 //	@AfterThrowing(pointcut="",throwing ="ex")
 //	public void afterThrowingOperation(JoinPoint joinPoint,Exception ex){
