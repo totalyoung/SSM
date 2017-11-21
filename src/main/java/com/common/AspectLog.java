@@ -37,7 +37,7 @@ public class AspectLog {
 //		}
 		//Method declaredMethod = clazz.getDeclaredMethod(name, args);
 		//declaredMethod.getp
-		System.out.println("kk");
+		System.out.println("kkddd");
 	}
 	
 //	@Around("@annotation(org.springframework.web.bind.annotation.RequestMapping)")
