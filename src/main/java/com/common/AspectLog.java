@@ -1,6 +1,9 @@
 package com.common;
 
 import java.lang.reflect.Method;
+import java.text.MessageFormat;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -37,6 +40,9 @@ public class AspectLog {
 //		}
 		//Method declaredMethod = clazz.getDeclaredMethod(name, args);
 		//declaredMethod.getp
+		long beforeTime = System.currentTimeMillis();
+		HttpServletRequest request = ServletUtil.getRequset();
+		request.setAttribute("beforeTime", beforeTime);
 		System.out.println("kkddd");
 	}
 	
@@ -54,7 +60,11 @@ public class AspectLog {
 //	
 	@AfterReturning(pointcut="@annotation(org.springframework.web.bind.annotation.RequestMapping)",returning="retVal")
 	public void afterReturningOperation(Object retVal){
-		System.out.println(retVal.toString());
+		HttpServletRequest request = ServletUtil.getRequset();
+		Long afterTime = System.currentTimeMillis();
+		Long beforeTime = (Long) request.getAttribute("beforeTime");
+		String str = MessageFormat.format("返回值：{0},执行时间：{1}",retVal.toString(), (afterTime-beforeTime)/1000);
+		System.out.println(str);
 	}	
 //	
 //	@AfterThrowing(pointcut="",throwing ="ex")
@@ -62,4 +72,7 @@ public class AspectLog {
 //		System.out.println("addLog.....");
 //	}
 	
+	public static void main(String[] args) {
+		System.out.println(3/1000);
+	}
 }
