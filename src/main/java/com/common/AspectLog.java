@@ -41,7 +41,7 @@ public class AspectLog {
 		//Method declaredMethod = clazz.getDeclaredMethod(name, args);
 		//declaredMethod.getp
 		long beforeTime = System.currentTimeMillis();
-		HttpServletRequest request = ServletUtil.getRequset();
+		HttpServletRequest request = ServletUtil.getRequest();
 		request.setAttribute("beforeTime", beforeTime);
 		System.out.println("kkddd");
 	}
@@ -60,10 +60,10 @@ public class AspectLog {
 //	
 	@AfterReturning(pointcut="@annotation(org.springframework.web.bind.annotation.RequestMapping)",returning="retVal")
 	public void afterReturningOperation(Object retVal){
-		HttpServletRequest request = ServletUtil.getRequset();
+		HttpServletRequest request = ServletUtil.getRequest();
 		Long afterTime = System.currentTimeMillis();
 		Long beforeTime = (Long) request.getAttribute("beforeTime");
-		String str = MessageFormat.format("返回值：{0},执行时间：{1}",retVal.toString(), (afterTime-beforeTime)/1000);
+		String str = MessageFormat.format("返回值：{0},执行时间：{1},IP地址：{2}",retVal.toString(), (afterTime-beforeTime)/1000,ServletUtil.getIpAddr());
 		System.out.println(str);
 	}	
 //	
