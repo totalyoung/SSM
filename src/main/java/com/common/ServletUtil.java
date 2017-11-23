@@ -76,7 +76,7 @@ public class ServletUtil {
 	
 	public static List<Object> getAllParamValues(){
 		Map<String, String[]> parameterMap = getRequest().getParameterMap();
-		List<Object> result = new LinkedList<>();
+		List<Object> result = new LinkedList<Object>();
 		if(parameterMap.size() < 1){
 			return result;
 		}
@@ -93,7 +93,7 @@ public class ServletUtil {
 	}
 	
 	public static List<String> getAllParam(){
-		List<String> result = new LinkedList<>();
+		List<String> result = new LinkedList<String>();
 		Enumeration<String> parameterNames = getRequest().getParameterNames();
 		if(!parameterNames.hasMoreElements()){
 			return result;

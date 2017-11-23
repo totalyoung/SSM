@@ -1,5 +1,6 @@
 package com.common.exception;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.common.JsonResult;
+import com.common.ResponseCode;
 
 @ControllerAdvice
 public class MyExceptionHandler{
@@ -36,9 +38,11 @@ public class MyExceptionHandler{
 	 @ResponseStatus(HttpStatus.OK)
 	 @ResponseBody
 	 public JsonResult ajaxException(MyException myException) {
-       
-        m.addObject("ericException", myException.getMessage());
-        m.setViewName("error/500");
-        return m;
+		//JsonResult result = null;
+		JsonResult result = myException.getJsonResult() == null ? new JsonResult() : myException.getJsonResult();
+		String msg = StringUtils.isNotBlank(result.getMsg()) ? StringUtils.isNotBlank(myException.getMessage()) ? "未知错误": myException.getMessage() : result.getMsg();
+		ResponseCode rec = ResponseCode.CODE_10001;
+		result.setMsg(msg);
+        return result;
     }
 }
