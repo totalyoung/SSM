@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -15,15 +14,11 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -31,140 +26,140 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.Lists;
-import com.riversoft.weixin.common.util.JsonMapper;
 import com.total2.Person;
 import com.total2.Work;
 
+/**
+ * 
+ * @author total
+ * @version 1.0
+ */
 public class JsonUtil {
 
-    private static JsonMapper defaultJsonMapper = null;
-    private static JsonMapper nonEmptyJsonMapper = null;
-    private static JsonMapper nonDefaultJsonMapper = null;
-    private static JsonMapper defaultUnwrapRootJsonMapper = null;
+    private static JsonUtil defaultJsonUtil = null;
+    private static JsonUtil nonEmptyJsonUtil = null;
+    private static JsonUtil nonDefaultJsonUtil = null;
+    private static JsonUtil defaultUnwrapRootJsonUtil = null;
 
     private ObjectMapper mapper;
+    
+	//创建一个节点工厂,为我们提供所有节点  
+    private static final JsonNodeFactory NODE_FACTOTY = new JsonNodeFactory(false);
 
-    public JsonMapper() {
+    public JsonUtil() {
         this(null, false);
     }
 
-    public JsonMapper(boolean unwrapRoot) {
+    public JsonUtil(boolean unwrapRoot) {
         this(null, unwrapRoot);
     }
 
-    public JsonMapper(JsonInclude.Include include, boolean unwrapRoot) {
-        mapper = new ObjectMapper();
+    public JsonUtil(JsonInclude.Include include, boolean unwrapRoot) {
+    	mapper = new ObjectMapper();
         // 设置输出时包含属性的风格
         if (include != null) {
-            mapper.setSerializationInclusion(include);
+        	mapper.setSerializationInclusion(include);
         }
         // 设置输入时忽略在JSON字符串中存在但Java对象实际没有的属性
         mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        // 对于空的对象转json的时候不抛出错误
+        //mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+        // 视空字符传为null
+        //mapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
+        // 禁用序列化日期为timestamps
         mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        // 允许单引号
         mapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
         mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
+        // 允许属性名称没有引号
         mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
+        // 低层级配置
         mapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
+        // 取消对非ASCII字符的转码
+        mapper.configure(JsonGenerator.Feature.ESCAPE_NON_ASCII, false);
         mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
-
+       
         if (unwrapRoot) {
-            mapper.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true);
+        	mapper.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true);
         }
     }
 
-    /**
+    public ObjectMapper getMapper() {
+		return mapper;
+	}
+
+
+	/**
      * 创建只输出非Null且非Empty(如List.isEmpty)的属性到Json字符串的Mapper,建议在外部接口中使用.
      */
-    public synchronized static JsonMapper nonEmptyMapper() {
-        if (nonEmptyJsonMapper == null) {
-            nonEmptyJsonMapper = new JsonMapper(JsonInclude.Include.NON_EMPTY, false);
+    public synchronized static JsonUtil nonEmptyMapper() {
+        if (nonEmptyJsonUtil == null) {
+            nonEmptyJsonUtil = new JsonUtil(JsonInclude.Include.NON_EMPTY, false);
         }
-        return nonEmptyJsonMapper;
+        return nonEmptyJsonUtil;
     }
 
     /**
      * 创建只输出初始值被改变的属性到Json字符串的Mapper, 最节约的存储方式，建议在内部接口中使用。
      */
-    public synchronized static JsonMapper nonDefaultMapper() {
-        if (nonDefaultJsonMapper == null) {
-            nonDefaultJsonMapper = new JsonMapper(JsonInclude.Include.NON_DEFAULT, false);
+    public synchronized static JsonUtil nonDefaultMapper() {
+        if (nonDefaultJsonUtil == null) {
+            nonDefaultJsonUtil = new JsonUtil(JsonInclude.Include.NON_DEFAULT, false);
         }
-        return nonDefaultJsonMapper;
+        return nonDefaultJsonUtil;
     }
 
-    public synchronized static JsonMapper defaultUnwrapRootMapper() {
-        if (defaultUnwrapRootJsonMapper == null) {
-            defaultUnwrapRootJsonMapper = new JsonMapper(true);
+    public synchronized static JsonUtil defaultUnwrapRootMapper() {
+        if (defaultUnwrapRootJsonUtil == null) {
+            defaultUnwrapRootJsonUtil = new JsonUtil(true);
         }
-        return defaultUnwrapRootJsonMapper;
+        return defaultUnwrapRootJsonUtil;
     }
 
     /**
      * 创建默认Mapper
      */
-    public synchronized static JsonMapper defaultMapper() {
-        if (defaultJsonMapper == null) {
-            defaultJsonMapper = new JsonMapper();
+    public synchronized static JsonUtil defaultMapper() {
+        if (defaultJsonUtil == null) {
+            defaultJsonUtil = new JsonUtil();
         }
-        return defaultJsonMapper;
+        return defaultJsonUtil;
     }
-    
-	private final ObjectMapper ob = new ObjectMapper();
-	private JsonFactory jf = new JsonFactory();
-	  //创建一个节点工厂,为我们提供所有节点  
-    private JsonNodeFactory jnf = new JsonNodeFactory(false);
-	
-    public JsonUtil(){
-    	//
-    	//ob.configure(SerializationFeature.INDENT_OUTPUT, true);  
-        // 配置mapper忽略空属性  
-		ob.setSerializationInclusion(Include.NON_EMPTY);  
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");  
-        ob.setDateFormat(dateFormat);  
-        // 对于空的对象转json的时候不抛出错误
-        ob.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
-        // 禁用序列化日期为timestamps
-        ob.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        // 禁用遇到未知属性抛出异常
-        ob.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-        // 视空字符传为null
-        ob.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
-        // 低层级配置
-        ob.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
-        // 允许属性名称没有引号
-        ob.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
-        // 允许单引号
-        ob.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
-        // 取消对非ASCII字符的转码
-        ob.configure(JsonGenerator.Feature.ESCAPE_NON_ASCII, false);
-    }
-    
-    public static JsonUtil getInstance(){
-    	
-    }
+
 	public ArrayList<String> nodeNameList(String content) throws JsonProcessingException, IOException{
 		
-		return Lists.newArrayList(ob.readTree(content).fieldNames());
+		return Lists.newArrayList(mapper.readTree(content).fieldNames());
 	}
 	
+	/**
+	 * 转换成json字符串
+	 * @param object
+	 * @return json字符串
+	 */
 	public String toJson(Object object) {
 		if(object == null){
 			return null;
 		}
 		try {
-			return  ob.writeValueAsString(object);
+			return  mapper.writeValueAsString(object);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 	
+	/**
+	 * 
+	 * @param content
+	 * @param javaBean
+	 * @return
+	 */
 	public <T>T toBean(String content,Class<T> javaBean){
 		if(StringUtils.isBlank(content)){
 			return null;
 		}
 		try {
-			 return  ob.readValue(content, javaBean);
+			 return  mapper.readValue(content, javaBean);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -173,48 +168,40 @@ public class JsonUtil {
 
 	@SuppressWarnings("unchecked")
 	public Map<String,Object> jsonToMap(String content){
-		if(StringUtils.isBlank(content)){
-			return null;
-		}
+		
 		return toBean(content, Map.class);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public Map<String,Object> beanToMap(Object object){
-		return jsonToMap(toJson(object));
+		return convertValue(object, Map.class);
 	}
 
 
 	public <T> T mapToBean(Map<String,Object> map,Class<T> javaBean){
-		if(map == null || map.size() == 0){
-			return null;
-		}
-		return (T) toBean(toJson(map),javaBean);
+		
+		return (T) convertValue(map,javaBean);
 	}
 	
 	
 	
 	public boolean containsNode(String nodeName,String content) throws JsonProcessingException, IOException{
-		return ob.readTree(content).findValue(nodeName) == null;
+		return mapper.readTree(content).findValue(nodeName) == null;
 	}
 	
 	public ObjectNode jsonToNode(String content) {
-		if(StringUtils.isBlank(content)){
-			return null;
-		}
 		try {
-			return (ObjectNode)ob.readTree(content);
+			
+			return toBean(content, ObjectNode.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 	
-	public ArrayNode strToArrayNode(String content) {
-		if(StringUtils.isBlank(content)){
-			return null;
-		}
+	public ArrayNode jsonToArrayNode(String content) {
 		try {
-			return (ArrayNode)ob.readTree(content);
+			return toBean(content, ArrayNode.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -223,10 +210,15 @@ public class JsonUtil {
 	}
 	
 	public ObjectNode beanToNode(Object object){
-		if(object == null){
+		
+		return convertValue(object,ObjectNode.class);
+	}
+	
+	public<T> T convertValue(Object fromValue,Class<T> toValueType){
+		if(fromValue == null){
 			return null;
 		}
-		return jsonToNode(toJson(object));
+		return mapper.convertValue(fromValue, toValueType);
 	}
 	
 	public <T> List<T> jsonToList(String content,Class<T> javaBean) throws JsonProcessingException, IOException {
@@ -234,7 +226,7 @@ public class JsonUtil {
 			return Collections.emptyList();
 		}
 		List<T> list = new ArrayList<T>();
-		JsonNode nodes = ob.readTree(content);
+		JsonNode nodes = mapper.readTree(content);
 		if(nodes.isArray()){
 			Iterator<JsonNode> iterator = nodes.iterator();
 			while(iterator.hasNext()){
@@ -247,12 +239,15 @@ public class JsonUtil {
 		return list;
 	}
 	
-	public <T> String listToJson(List<T> list) {
-		return toJson(list.getClass());
+	public static ObjectNode getObjectNode(){
+		return NODE_FACTOTY.objectNode();
+	}
+
+	public static ArrayNode getArrayNode(){
+		return NODE_FACTOTY.arrayNode();
 	}
 	
-
-	public Person initBean() throws ParseException{
+	public static Person initBean() throws ParseException{
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");  
 		Person one = new Person();
         one.setAge(1);
@@ -296,36 +291,61 @@ public class JsonUtil {
 	        
 	}
 	public static void main(String[] args) throws JsonParseException, IOException, ParseException {
-		
-		ObjectMapper ob = new ObjectMapper();
-		BaseParam b = new BaseParam();
-		Person p1 = b.initBean();
-		Person p2 = b.initBean();
+		JsonUtil jsonUtil = JsonUtil.nonDefaultMapper();
+		Person p1 = JsonUtil.initBean();
+		Person p2 = JsonUtil.initBean();
 		List<Person> list = new LinkedList<Person>();
 		list.add(p1);
 		list.add(p2);
-		String str = ob.writeValueAsString(list);
-        System.out.println(str);
-       
-        List list1 = b.toBean(str,List.class);
-        //Person p3 = list1.get(0);
-        System.out.println(list1);
+		Map<String,Object> map = new HashMap<String, Object>();
+		map.put("name","mapToBean");
+		//map.put("child",p1);
+		map.put("phone", "123456");
+		
+		System.out.println("\n-------------测试toJson-------------");
+        System.out.println(jsonUtil.toJson(list));
+        System.out.println(jsonUtil.toJson(p1));
         
-//        Map<String,Object> m1 = new HashMap<String, Object>();
-//        Map<String,Object> m2 = new HashMap<String, Object>();
-//        m1.put("a", 1);
-//        m1.put("name","yang");
-//        m2.put("b", "b");
-//        List<Map<String,Object>> list2 = new LinkedList<Map<String,Object>>();
-//        list2.add(m1);
-//        list2.add(m2);
-//        String str2 = b.listToJson(list2);
-//        System.out.println(str2);
-//        
-//        Person p = b.mapToBean(m1, Person.class);
-//        //String s = b.mapToStr(m1);
-//        JsonNode readTree = ob.readTree(str);
-//        System.out.println(readTree.size());
         
+        System.out.println("\n-------------测试toBean-------------");
+        //System.out.println(jsonUtil.toBean(jsonUtil.toJson(p1), Person.class).getChild().get("one").getName());
+        System.out.println(jsonUtil.toBean(jsonUtil.toJson(p1), Person.class));
+        
+        System.out.println("\n-------------测试jsonToMap-------------");
+        System.out.println(jsonUtil.jsonToMap(jsonUtil.toJson(p1)));
+        
+        System.out.println("\n-------------测试beanToMap-------------");
+        System.out.println(jsonUtil.beanToMap(p1));
+        
+        System.out.println("\n-------------测试mapToBean-------------");
+        System.out.println(jsonUtil.mapToBean(jsonUtil.beanToMap(p1), Person.class));
+        
+        System.out.println("\n-------------测试jsonToNode-------------");
+        System.out.println(jsonUtil.jsonToNode(jsonUtil.toJson(p1)));
+        
+        System.out.println("\n-------------测试jsonToArrayNode-------------");
+        System.out.println(jsonUtil.jsonToArrayNode(jsonUtil.toJson(list)));
+        
+        System.out.println("\n-------------测试getObjectNode-------------");
+        ObjectNode node = JsonUtil.getObjectNode();
+        node.put("name", "hahah ");
+        System.out.println(node);
+        
+        System.out.println("\n-------------测试getArrayNode-------------");
+        ArrayNode aNode = JsonUtil.getArrayNode();
+        aNode.add(node);
+        aNode.add(jsonUtil.jsonToNode(jsonUtil.toJson(p1)));
+        System.out.println(aNode);
+        
+        System.out.println("\n-------------测试beanToNode-------------");
+        ObjectNode node2 = jsonUtil.beanToNode(p1);
+        node2.put("test", "beanToNode");
+        System.out.println(node2);
+        node2 = jsonUtil.beanToNode(jsonUtil.beanToMap(p1).put("test2", "beanToNode"));
+        System.out.println(node2);
+        
+        System.out.println("\n-------------测试jsonToList-------------");
+        List<Person> list2 = jsonUtil.jsonToList(jsonUtil.toJson(list), Person.class);
+        System.out.println(list2);
 	}
 }

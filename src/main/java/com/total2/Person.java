@@ -77,6 +77,6 @@ public class Person {
 	}
 	
 //	public String toString(){
-//		
+//		return "name = "+getName()+", child = "+getChild()+", phone = "+getPhone();
 //	}
 }
