@@ -29,7 +29,7 @@ public class SpringContextUtil implements ApplicationContextAware {
 	 * @return
 	 */
 	public static Object getBeanById(String id) {
-		return context.getBean(id);
+		return  context.getBean(id);
 	}
 
 	/**

@@ -7,7 +7,7 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
 	// 返回的带有@Configuration注解的类将会用来配置ContextLoaderListener创建的应用上下文中的bean,这些bean通常是驱动应用后端的中间层和数据层组件
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
-		return new Class<?>[] { ApplicationConfig.class };
+		return new Class<?>[] { ApplicationConfig.class,CacheConfig.class};
 	}
 
 	// 返回的带有@Configuration注解的类将会用来定义DispatcherServlet应用上下文中的bean,如控制器、

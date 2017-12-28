@@ -16,7 +16,7 @@ import com.common.AspectLog;
 @Configuration
 @EnableAspectJAutoProxy // 启用切面，范围在@ComponentScan扫描
 @EnableWebMvc // 启用mvc，范围在@ComponentScan扫描
-@ComponentScan("com.total") // 启用组件扫描
+@ComponentScan("com.mvc") // 启用组件扫描
 public class MVCConfig extends WebMvcConfigurerAdapter {
 
 	private int a = 1;

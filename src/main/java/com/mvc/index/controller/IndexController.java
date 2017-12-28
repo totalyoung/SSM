@@ -1,4 +1,4 @@
-package com.total.index.controller;
+package com.mvc.index.controller;
 
 import javax.annotation.Resource;
 
