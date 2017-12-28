@@ -50,13 +50,18 @@ public class MVCConfig extends WebMvcConfigurerAdapter{
 		configurer.enable();
 	}
 	
+	/**
+	 * 配置切面
+	 * @return
+	 */
 	@Bean
 	public AspectLog aspectLog(){
 		return new AspectLog();
 	}
 	
+	
 	@Bean
-	public Aspect2 aspect2(){
+	public Aspect2 aspect2() {
 		return new Aspect2();
 	}
 }
