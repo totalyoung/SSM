@@ -4,22 +4,25 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class Person {
 
 	private String name;
-	
+
 	private Integer age;
-	
-	private Map<String,Person> child;
-	
+
+	private Map<String, Person> child;
+
 	private List<String> phone;
-	
+
 	private String[] skills;
-	
+
 	private Work work;
 
 	private Date born;
-	
+
 	public Date getBorn() {
 		return born;
 	}
@@ -75,8 +78,9 @@ public class Person {
 	public void setWork(Work work) {
 		this.work = work;
 	}
-	
-//	public String toString(){
-//		return "name = "+getName()+", child = "+getChild()+", phone = "+getPhone();
-//	}
+
+	// public String toString(){
+	// return "name = "+getName()+", child = "+getChild()+", phone =
+	// "+getPhone();
+	// }
 }

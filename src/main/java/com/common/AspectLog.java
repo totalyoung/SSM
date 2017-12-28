@@ -23,6 +23,7 @@ public class AspectLog {
 	private Logger logger = LoggerFactory.getLogger(AspectLog.class);
 
 	@Before("@annotation(org.springframework.web.bind.annotation.RequestMapping)")
+	// @Before("execution(* com.total2.*.*(..))")
 	public void beforeOperation(JoinPoint joinPoint) throws NoSuchMethodException, SecurityException {
 		// String name = joinPoint.getSignature().getName();
 		// Class<?> clazz = joinPoint.getTarget().getClass();
