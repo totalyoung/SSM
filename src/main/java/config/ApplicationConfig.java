@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 // @EnableAspectJAutoProxy
-@ComponentScan("com.total2")
+@ComponentScan("com.application")
 public class ApplicationConfig {
 
 

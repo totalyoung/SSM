@@ -33,9 +33,10 @@ public class CacheConfig {
 	@Bean
 	public RedisConnectionFactory redisCF() {
 		JedisConnectionFactory cf = new JedisConnectionFactory();
-		cf.setHostName("r-bp128550e12dba54.redis.rds.aliyuncs.com");
-		cf.setPassword("Young123");
+		cf.setHostName("192.168.1.248");
+		cf.setPassword("gentle888");
 		cf.setPort(6379);
+		cf.setDatabase(0);
 		return cf;
 	}
 	
