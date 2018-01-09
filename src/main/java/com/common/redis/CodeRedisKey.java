@@ -1,4 +1,4 @@
-package com.common;
+package com.common.redis;
 
 import java.io.Serializable;
 
@@ -21,7 +21,7 @@ public class CodeRedisKey implements Serializable {
 	/**
 	 * 售后服务号的key
 	 */
-	public static final String ORDER_SERVICE_NO = "getServiceNo";
+	public static final String ORDER_SERVICE_NO = "getServiceNo2223";
 	
 
 }

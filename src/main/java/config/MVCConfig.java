@@ -10,7 +10,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
-import com.common.Aspect2;
 import com.common.AspectLog;
 
 @Configuration
@@ -51,9 +50,5 @@ public class MVCConfig extends WebMvcConfigurerAdapter {
 		return new AspectLog();
 	}
 
-	@Bean
-	public Aspect2 aspect2() {
-		return new Aspect2();
-	}
 
 }

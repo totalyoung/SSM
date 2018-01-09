@@ -1,4 +1,4 @@
-package com.common.exception;
+package com.application.exception;
 
 import com.common.JsonResult;
 

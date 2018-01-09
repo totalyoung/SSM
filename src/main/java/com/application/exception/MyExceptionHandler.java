@@ -1,4 +1,4 @@
-package com.common.exception;
+package com.application.exception;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
@@ -34,15 +34,15 @@ public class MyExceptionHandler{
         return m;
     }
 	 
-	 @ExceptionHandler({MyException.class})
-	 @ResponseStatus(HttpStatus.OK)
-	 @ResponseBody
-	 public JsonResult ajaxException(MyException myException) {
-		//JsonResult result = null;
-		JsonResult result = myException.getJsonResult() == null ? new JsonResult() : myException.getJsonResult();
-		String msg = StringUtils.isNotBlank(result.getMsg()) ? StringUtils.isNotBlank(myException.getMessage()) ? "未知错误": myException.getMessage() : result.getMsg();
-		ResponseCode rec = ResponseCode.CODE_10001;
-		result.setMsg(msg);
-        return result;
-    }
+//	 @ExceptionHandler({MyException.class})
+//	 @ResponseStatus(HttpStatus.OK)
+//	 @ResponseBody
+//	 public JsonResult ajaxException(MyException myException) {
+//		//JsonResult result = null;
+//		JsonResult result = myException.getJsonResult() == null ? new JsonResult() : myException.getJsonResult();
+//		String msg = StringUtils.isNotBlank(result.getMsg()) ? StringUtils.isNotBlank(myException.getMessage()) ? "未知错误": myException.getMessage() : result.getMsg();
+//		ResponseCode rec = ResponseCode.CODE_10001;
+//		result.setMsg(msg);
+//        return result;
+//    }
 }
