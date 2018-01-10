@@ -1,5 +1,7 @@
 package config;
 
+import javax.servlet.ServletRegistration.Dynamic;
+
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
@@ -23,9 +25,9 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
 		return new String[] { "/" };
 	}
 
-	// @Override
-	// protected void customizeRegistration(Dynamic registration){
-	// registration.setInitParameters(arg0)
-	// }
+	 @Override
+	 protected void customizeRegistration(Dynamic registration){
+		
+	 }
 
 }
