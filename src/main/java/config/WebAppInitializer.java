@@ -1,7 +1,9 @@
 package config;
 
+import javax.servlet.Filter;
 import javax.servlet.ServletRegistration.Dynamic;
 
+import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
@@ -25,9 +27,35 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
 		return new String[] { "/" };
 	}
 
-	 @Override
-	 protected void customizeRegistration(Dynamic registration){
-		
-	 }
+	@Override
+	protected void customizeRegistration(Dynamic registration) {
+
+	}
+
+//	@Override
+//	public void onStartup(ServletContext servletContext) throws ServletException {
+//		FilterRegistration filterRegistration = servletContext.getFilterRegistration("characterEncodingFilter");
+//		filterRegistration.addMappingForUrlPatterns(null, false, "/mvc/*");
+//		super.onStartup(servletContext);
+//	}
+
+//	@Override
+//	protected javax.servlet.FilterRegistration.Dynamic registerServletFilter(ServletContext servletContext,
+//			Filter filter) {
+//		javax.servlet.FilterRegistration.Dynamic dynamic = super.registerServletFilter(servletContext, filter);
+//		String filterName = Conventions.getVariableName(filter);
+//		if(StringUtils.equals("characterEncodingFilter", filterName)){
+//			dynamic.addMappingForUrlPatterns(null, false, "/mvc/*");
+//		}
+//		return dynamic;
+//	}
+
+	@Override
+	protected Filter[] getServletFilters() {
+		CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
+		characterEncodingFilter.setForceEncoding(true);
+		characterEncodingFilter.setEncoding("UTF-8");
+		return new Filter[] { characterEncodingFilter };
+	}
 
 }
