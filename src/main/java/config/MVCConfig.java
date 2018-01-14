@@ -4,6 +4,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -50,5 +52,12 @@ public class MVCConfig extends WebMvcConfigurerAdapter {
 		return new AspectLog();
 	}
 
-
+	//注入CommonsMultipartResolver 用于文件上传
+	@Bean
+	public MultipartResolver multipartResolver(){
+		CommonsMultipartResolver multipartResolver= new CommonsMultipartResolver();
+		multipartResolver.setMaxUploadSize(10 * 1024 * 1024);//一次上传文件的总和最大限制
+		multipartResolver.setMaxUploadSizePerFile(2 * 1024 * 1024);//每个上传文件的最大限制
+		return multipartResolver;
+	}
 }

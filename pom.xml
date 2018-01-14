@@ -108,17 +108,29 @@
 			<artifactId>spring-data-redis</artifactId>
 			<version>1.8.7.RELEASE</version>
 		</dependency>
-		<dependency>  
-	        <groupId>redis.clients</groupId>  
-	        <artifactId>jedis</artifactId>  
-	        <version>2.9.0</version>  
-    	</dependency>  
-    	<!-- redis -->
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-jdk14</artifactId>
-			<version>1.7.7</version>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+			<version>2.9.0</version>
+		</dependency>
+		<!-- redis -->
+		<!-- <dependency> <groupId>org.slf4j</groupId> <artifactId>slf4j-jdk14</artifactId> 
+			<version>1.7.7</version> </dependency> -->
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-core</artifactId>
+			<version>1.2.3</version>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.2.3</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.3.1</version>
 		</dependency>
 	</dependencies>
 	<build>
