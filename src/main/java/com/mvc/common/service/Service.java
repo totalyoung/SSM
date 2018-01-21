@@ -1,6 +1,6 @@
-package com.mvc.common.dao;
+package com.mvc.common.service;
 
-public interface Dao {
+public interface Service {
 
 	<T> int insert(T t);
 
@@ -9,5 +9,4 @@ public interface Dao {
 	int delete(String id);
 
 	<T> T get(String id);
-
 }
