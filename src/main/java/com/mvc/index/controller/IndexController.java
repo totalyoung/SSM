@@ -1,5 +1,10 @@
 package com.mvc.index.controller;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -34,10 +39,14 @@ public class IndexController {
 
 	@ResponseBody
 	@RequestMapping(value = "/index2/{userId}", method = { RequestMethod.POST })
-	public Person SSMIndex2(@PathVariable String userId, @ModelAttribute Person p) {
+	public Person SSMIndex2(@PathVariable String userId, @ModelAttribute Person p) throws SQLException, ClassNotFoundException {
 		// requestEntity.status(HttpStatus.ACCEPTED);
 		// RedisUtil.set(CodeRedisKey.ORDER_SERVICE_NO + userId, "test", 3600);
-
+		Class.forName("com.mysql.jdbc.Driver");
+		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "admin");
+		PreparedStatement pre = connection.prepareStatement("");
+		
+		
 		return p;
 	}
 
