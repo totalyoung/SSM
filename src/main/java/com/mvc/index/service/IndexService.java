@@ -1,5 +1,7 @@
 package com.mvc.index.service;
 
-public interface IndexService {
+import com.mvc.common.service.Service;
+
+public interface IndexService extends Service{
 
 }

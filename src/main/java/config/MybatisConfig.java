@@ -10,6 +10,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 
 /**
  *
@@ -23,15 +24,19 @@ public class MybatisConfig {
 
 	@Bean
 	public DataSource dataSource() {
-		return new PooledDataSource("com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/bus?characterEncoding=UTF-8",
+//		return new PooledDataSource("com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/bus?characterEncoding=UTF-8",
+//				"root", "1234");
+		return new PooledDataSource("com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/test?characterEncoding=UTF-8",
 				"root", "1234");
 	}
 
 	@Bean
 	public SqlSessionFactory sqlSessionFactory() throws Exception {
+
 		SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
 		sessionFactory.setDataSource(dataSource());
-		sessionFactory.setConfigLocation(new InputStreamResource(Resources.getResourceAsStream("mybatis-config.xml")));
+		sessionFactory.setConfigLocation(new InputStreamResource(Resources.getResourceAsStream("/mybatis-config.xml")));
+		sessionFactory.setMapperLocations(new Resource[]{new InputStreamResource(Resources.getResourceAsStream("/mapper/**/*.xml"))});
 		return sessionFactory.getObject();
 	}
 

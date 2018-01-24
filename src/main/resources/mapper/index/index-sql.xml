@@ -13,7 +13,7 @@
 		select id,name,phone from index
 	</sql>
 	
-	<select id="get" resultType="index">
+	<select id="get" resultType="com.mvc.index.entity.Index">
 		SELECT * FROM index
 	</select>
 	

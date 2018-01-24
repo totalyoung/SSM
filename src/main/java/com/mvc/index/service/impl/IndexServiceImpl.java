@@ -8,16 +8,19 @@ import com.mvc.common.service.impl.ServiceSupport;
 import com.mvc.index.dao.IndexDao;
 import com.mvc.index.service.IndexService;
 
-@Service
+@Service("indexService")
 public class IndexServiceImpl extends ServiceSupport implements IndexService {
 
 	@Autowired
 	private IndexDao indexDao;
 	
 	@Override
-	public void setDao(Dao dao) {
-		
-		
+	public IndexDao getDao() {
+		return indexDao;
+	}
+
+	public void setDao(IndexDao indexDao) {
+		this.indexDao = indexDao;
 	}
 
 }
