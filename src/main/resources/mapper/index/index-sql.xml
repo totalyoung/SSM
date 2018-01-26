@@ -14,7 +14,7 @@
 	</sql>
 	
 	<select id="get" resultType="com.mvc.index.entity.Index">
-		SELECT * FROM index
+		SELECT * FROM `index` where id = #{id}
 	</select>
 	
 	<update id="update">
@@ -23,7 +23,7 @@
 	
 	
 	
-	<insert id="insert" parameterType="index">
+	<insert id="insert" parameterType="com.mvc.index.entity.Index">
 		
 	</insert>
 	

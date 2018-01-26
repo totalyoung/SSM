@@ -36,7 +36,7 @@ public class MybatisConfig {
 		SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
 		sessionFactory.setDataSource(dataSource());
 		sessionFactory.setConfigLocation(new InputStreamResource(Resources.getResourceAsStream("/mybatis-config.xml")));
-		sessionFactory.setMapperLocations(new Resource[]{new InputStreamResource(Resources.getResourceAsStream("/mapper/**/*.xml"))});
+		sessionFactory.setMapperLocations(new Resource[]{new InputStreamResource(Resources.getResourceAsStream("/mapper/index/index-sql.xml"))});
 		return sessionFactory.getObject();
 	}
 
