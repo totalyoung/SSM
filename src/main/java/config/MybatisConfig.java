@@ -10,7 +10,10 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.PathResource;
 import org.springframework.core.io.Resource;
+
+import com.common.FileUtil;
 
 /**
  *
@@ -36,7 +39,7 @@ public class MybatisConfig {
 		SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
 		sessionFactory.setDataSource(dataSource());
 		sessionFactory.setConfigLocation(new InputStreamResource(Resources.getResourceAsStream("/mybatis-config.xml")));
-		sessionFactory.setMapperLocations(new Resource[]{new InputStreamResource(Resources.getResourceAsStream("/mapper/index/index-sql.xml"))});
+		sessionFactory.setMapperLocations(FileUtil.getMapper());
 		return sessionFactory.getObject();
 	}
 
