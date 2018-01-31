@@ -7,6 +7,7 @@ import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.InputStreamResource;
@@ -25,6 +26,9 @@ import com.common.FileUtil;
 @MapperScan("com.mvc.*.dao")
 public class MybatisConfig {
 
+	@Value("${ssm.test.aa}")
+	private String test;
+	
 	@Bean
 	public DataSource dataSource() {
 //		return new PooledDataSource("com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/bus?characterEncoding=UTF-8",
@@ -35,7 +39,7 @@ public class MybatisConfig {
 
 	@Bean
 	public SqlSessionFactory sqlSessionFactory() throws Exception {
-
+		System.out.println(test);
 		SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
 		sessionFactory.setDataSource(dataSource());
 		sessionFactory.setConfigLocation(new InputStreamResource(Resources.getResourceAsStream("/mybatis-config.xml")));

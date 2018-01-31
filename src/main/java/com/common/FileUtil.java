@@ -16,8 +16,10 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Properties;
 
 import org.springframework.core.io.PathResource;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
 
 /**
  *
@@ -162,9 +164,22 @@ public class FileUtil {
 	public static List<Path> scanXmlFile(String path){
 		return scanFile(path,"^([a-zA-Z]+-?)+[a-zA-Z0-9]+\\.[x|X][m|M][l|L]$");
 	}
+	
+	public static List<Path> scanPropertiesFile(String path){
+		return scanFile(path,"^([a-zA-Z]+-?)+[a-zA-Z0-9]+\\.[p|P][r|R][o|O][p|P][e|E][r|R][t|T][i|I][e|E][s|S]$");
+	}
 
 	public static PathResource[] getMapper(){
 		List<Path> paths = scanXmlFile("mapper");
+		PathResource[] pr = new PathResource[paths.size()];
+		for (int i = 0; i < paths.size(); i++) {
+			pr[i] = new PathResource(paths.get(i));
+		}
+		return pr;
+	}
+	
+	public static PathResource[] getProperties(){
+		List<Path> paths = scanPropertiesFile("config");
 		PathResource[] pr = new PathResource[paths.size()];
 		for (int i = 0; i < paths.size(); i++) {
 			pr[i] = new PathResource(paths.get(i));
