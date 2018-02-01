@@ -26,7 +26,7 @@ import com.common.FileUtil;
 @MapperScan("com.mvc.*.dao")
 public class MybatisConfig {
 
-	@Value("${ssm.test.aa}")
+	@Value("${ssm.aa.test}")
 	private String test;
 	
 	@Bean

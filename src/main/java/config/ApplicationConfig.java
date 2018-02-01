@@ -26,7 +26,8 @@ public class ApplicationConfig {
 	@Bean
 	public PropertyPlaceholderConfigurer  propertyPlaceholderConfigurer(){
 		PropertyPlaceholderConfigurer p = new PropertyPlaceholderConfigurer();
-		//p.p
+		p.setLocations(FileUtil.getProperties());
+		p.setIgnoreResourceNotFound(true);
 		return p;
 	}
 }
